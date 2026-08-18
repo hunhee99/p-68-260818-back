@@ -1,0 +1,47 @@
+package com.choi.p67260811.global.exceptionHandler;
+
+import com.choi.p67260811.global.dto.RsData;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.Comparator;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+
+
+// Controller에서 발생하는 예외를 이걸로 처리한다.
+@ControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(NoSuchElementException.class)
+    @ResponseBody
+    public RsData<Void> noSuchElementException(NoSuchElementException e) {
+        return new RsData<Void>(
+                "404-1",
+                "존재하지 않는 데이터입니다."
+        );
+    }
+
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseBody
+    public RsData<Void> methodArgumentNotValidException(MethodArgumentNotValidException e){
+
+        String message = e.getBindingResult()
+                .getAllErrors()
+                .stream()
+                .filter(error -> error instanceof FieldError)
+                .map(error -> (FieldError) error)
+                .map(error -> error.getField() + "-" + error.getCode() + "-" + error.getDefaultMessage())
+                .sorted(Comparator.comparing(String::toString))
+                .collect(Collectors.joining("\n"));
+
+        return new RsData<Void>(
+                "400-1",
+                message
+        );
+    }
+}
