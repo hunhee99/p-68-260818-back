@@ -57,7 +57,7 @@ public class PostCommentController {
     @Transactional
     public RsData<PostCommentDto> write(
             @PathVariable int postId,
-            @Valid CommentWriteForm form
+            @Valid @RequestBody CommentWriteForm form
     ) {
 
         Post post = postService.findById(postId).get();

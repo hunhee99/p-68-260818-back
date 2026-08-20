@@ -36,6 +36,15 @@ public class ApiV1PostController {
         return postDtoList;
     }
 
+    @Operation(summary = "단건 조회")
+    @GetMapping("/{id}")
+    public PostDto detail(@PathVariable int id) {
+
+        Post post = postService.findById(id).get();
+
+        return new PostDto(post);
+    }
+
     record PostWriteReqBody(
             @Size(min = 2, max = 10, message = "제목은 2글자 이상 10글자 이하로 작성")
             @NotBlank(message = "제목을 입력해주세요.")
@@ -86,14 +95,7 @@ public class ApiV1PostController {
         );
     }
 
-    @Operation(summary = "단건 조회")
-    @GetMapping("/{id}")
-    public PostDto detail(@PathVariable int id) {
 
-        Post post = postService.findById(id).get();
-
-        return new PostDto(post);
-    }
 
 
     @DeleteMapping("/{id}")
