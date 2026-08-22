@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 public record PostCommentDto(
         int id,
-        String comment,
+        String content,
         LocalDateTime createDate,
         LocalDateTime modifyDate
 ) {

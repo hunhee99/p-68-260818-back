@@ -86,7 +86,7 @@ public class PostCommentController {
     public RsData<Void> modify(
             @PathVariable int postId,
             @PathVariable int commentId,
-            @Valid CommentModifyForm form
+            @Valid @RequestBody CommentModifyForm form
     ) {
 
         Post post = postService.findById(postId).get();
